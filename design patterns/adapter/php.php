@@ -42,6 +42,7 @@ class ConcreteAdapter2 implements IAdapter
         return $this->object->nameIsVeryLongAndUncomfortable($a, $b);
     }
 }
+
 //в одном месте мы создаем конкретный адаптер а потом пользуемся интерфейсом
 $adapter1 = new ConcreteAdapter1();
 $adapter2 = new ConcreteAdapter2();
