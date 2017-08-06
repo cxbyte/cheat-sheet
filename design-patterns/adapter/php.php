@@ -1,4 +1,5 @@
 <?php
+
 class IndependentDeveloper1
 {
     public function calc($a, $b) {
