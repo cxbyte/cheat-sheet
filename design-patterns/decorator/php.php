@@ -39,8 +39,9 @@ class DecoratorShouldActive implements IResult
     }
 }
 
-$result = new Result();
-var_dump($result->getResult());
-
-$result = new DecoratorShouldActive(new Result());
-var_dump($result->getResult());
+/**
+ * @var $decorator IResult
+ */
+foreach ([new Result(), new DecoratorShouldActive(new Result())] as $decorator) {
+    var_dump($decorator->getResult());
+}
