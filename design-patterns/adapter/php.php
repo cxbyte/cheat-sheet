@@ -1,61 +1,59 @@
 <?php
 
-class IndependentDeveloper1
+interface IResult
 {
-    public function calc($a, $b) {
-        return $a + $b;
+    public function getResult(): array;
+}
+
+class ResultFile
+{
+    public function getResultFromFile(): array
+    {
+        return ['result' => 'file'];
     }
 }
 
-class IndependentDeveloper2
+class ResultDB
 {
-    public function nameIsVeryLongAndUncomfortable($a, $b) {
-        return $a + $b;
+    public function getResultFromDB(): array
+    {
+        return ['result' => 'db'];
     }
 }
 
-interface IAdapter
-{
-    public function sum($a, $b);
-}
-
-class ConcreteAdapter1 implements IAdapter
-{
-    protected $object;
-
-    public function __construct() {
-        $this->object = new IndependentDeveloper1();
-    }
-    public function sum($a, $b) {
-        return $this->object->calc($a, $b);
-    }
-}
-
-class ConcreteAdapter2 implements IAdapter
+class FileAdapter implements IResult
 {
     protected $object;
 
-    public function __construct() {
-        $this->object = new IndependentDeveloper2();
+    public function __construct()
+    {
+        $this->object = new ResultFile();
     }
-    public function sum($a, $b) {
-        return $this->object->nameIsVeryLongAndUncomfortable($a, $b);
+
+    public function getResult(): array
+    {
+        return $this->object->getResultFromFile();
     }
 }
 
-//в одном месте мы создаем конкретный адаптер а потом пользуемся интерфейсом
-$adapter1 = new ConcreteAdapter1();
-$adapter2 = new ConcreteAdapter2();
+class DBAdapter implements IResult
+{
+    protected $object;
+
+    public function __construct()
+    {
+        $this->object = new ResultDB();
+    }
+
+    public function getResult(): array
+    {
+        return $this->object->getResultFromDB();
+    }
+}
 
 /**
- * Везде в коде мы не используем классы напрямую а через интерфейс
- * этой функции нет разницы какой класс мы используем, так как мы опираемся на интерфейс
- *
- * @param IAdapter $adapter
+ * @var $adapter IResult
  */
-function sum(IAdapter $adapter) {
-    echo $adapter->sum(2, 2);
+foreach ([new FileAdapter(), new DBAdapter()] as $adapter) {
+    var_dump($adapter->getResult());
 }
-
-sum($adapter1);
-sum($adapter2);
